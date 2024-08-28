@@ -49,7 +49,8 @@ namespace MusicPlayer.Views
 
 		private void buttonBrowse_Click(object sender, RoutedEventArgs e)
 		{
-
+			BrowserWindow browser = new BrowserWindow();
+			browser.Show();
 		}
 
 		private void btnPrevious_Click(object sender, RoutedEventArgs e)

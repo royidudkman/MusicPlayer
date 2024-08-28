@@ -93,11 +93,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Services\FileService.cs" />
-    <Compile Include="Utils\MediaElementWrapper.cs" />
+    <Compile Include="Services\YoutubeService.cs" />
     <Compile Include="Utils\TimeSpanToDoubleConverter.cs" />
     <Compile Include="Utils\VolumeConverter.cs" />
     <Compile Include="ViewModels\LibraryViewModel.cs" />
     <Compile Include="ViewModels\UploadMusicViewModel.cs" />
+    <Page Include="Views\BrowserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -105,6 +109,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModels\YoutubeViewModel.cs" />
+    <Compile Include="Views\BrowserWindow.xaml.cs">
+      <DependentUpon>BrowserWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -154,6 +162,23 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack">
+      <Version>1.11.64</Version>
+    </PackageReference>
+    <PackageReference Include="MediaToolkit">
+      <Version>1.1.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Web.WebView2">
+      <Version>1.0.2739.15</Version>
+    </PackageReference>
+    <PackageReference Include="VideoLibrary">
+      <Version>3.2.5</Version>
+    </PackageReference>
+    <PackageReference Include="YoutubeDLSharp">
+      <Version>1.1.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
