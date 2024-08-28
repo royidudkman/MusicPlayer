@@ -1,9 +1,11 @@
-﻿using MusicPlayer.Models;
+﻿using Microsoft.Toolkit.Wpf.UI.Controls;
+using MusicPlayer.Models;
 using MusicPlayer.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +16,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
+
 
 namespace MusicPlayer.Views
 {
@@ -24,12 +28,14 @@ namespace MusicPlayer.Views
 	{
 		private MainViewModel m_MainViewModel;
 		private bool isPlaying = false;
+		private CancellationTokenSource cts = new CancellationTokenSource();
+
+		
 		public MainWindow()
 		{
 			InitializeComponent();
 			m_MainViewModel = new MainViewModel();
 			DataContext = m_MainViewModel;	
-			
 		}
 
 		private void buttonUpload_Click(object sender, RoutedEventArgs e)
@@ -48,32 +54,85 @@ namespace MusicPlayer.Views
 			}
 		}
 
-		private void PlaySong(Song song)
+		private async void PlaySong(Song song)
 		{
 			if (song != null)
 			{
 				mediaElement.Source = new Uri(song.FilePath, UriKind.Absolute);
 				isPlaying = true;
 				mediaElement.Play();
+				await UpdateUIAsync(cts.Token);
+			}
+		}
+
+		private async Task UpdateUIAsync(CancellationToken token)
+		{
+			try
+			{
+				while (isPlaying)
+				{
+					if (mediaElement.NaturalDuration.HasTimeSpan)
+					{
+						positionSlider.Value = mediaElement.Position.TotalSeconds;
+						textCurrentTime.Text = mediaElement.Position.ToString(@"mm\:ss");
+						
+					}
+
+					await Task.Delay(1000, token); 
+				}
+			}
+			catch (TaskCanceledException)
+			{
+				// Handle the cancellation if needed
 			}
 		}
 
 		private void btnPrevious_Click(object sender, RoutedEventArgs e)
 		{
-			if(listBoxSongs.Items.Count > 0 && listBoxSongs.SelectedIndex > 0)
+			if(mediaElement.Position.TotalSeconds < 5)
 			{
-				listBoxSongs.SelectedIndex--;
+				SkipToPreviousSong();
 
-				Song selectedSong = listBoxSongs.SelectedItem as Song;
+			}
 
-				if(selectedSong != null)
-				{
-					PlaySong(selectedSong);
-				}
+			else
+			{
+				mediaElement.Position = TimeSpan.FromSeconds(0);	
 			}
 		}
 
 		private void btnNext_Click(object sender, RoutedEventArgs e)
+		{
+			SkipToNextSong();
+		}
+
+		private void btnPlayPause_Click(object sender, RoutedEventArgs e)
+		{
+			if (isPlaying)
+			{
+				isPlaying = false;
+				mediaElement.Pause();
+				cts.Cancel();
+			}
+
+			else
+			{
+				isPlaying = true;
+				mediaElement.Play();
+				cts = new CancellationTokenSource();
+				_ = UpdateUIAsync(cts.Token);
+			}
+		}
+
+		private void positionSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+			if (mediaElement.NaturalDuration.HasTimeSpan)
+			{
+				mediaElement.Position = TimeSpan.FromSeconds(positionSlider.Value);
+			}
+		}
+
+		private void SkipToNextSong()
 		{
 			if (listBoxSongs.Items.Count > 0)
 			{
@@ -95,20 +154,24 @@ namespace MusicPlayer.Views
 			}
 		}
 
-		private void btnPlayPause_Click(object sender, RoutedEventArgs e)
+		private void SkipToPreviousSong()
 		{
-			if (isPlaying)
+			if (listBoxSongs.Items.Count > 0 && listBoxSongs.SelectedIndex > 0)
 			{
-				isPlaying = false;
-				mediaElement.Pause();
-			}
+				listBoxSongs.SelectedIndex--;
 
-			else
-			{
-				isPlaying = true;
-				mediaElement.Play();
+				Song selectedSong = listBoxSongs.SelectedItem as Song;
+
+				if (selectedSong != null)
+				{
+					PlaySong(selectedSong);
+				}
 			}
 		}
 
+		private void mediaElement_MediaEnded(object sender, RoutedEventArgs e)
+		{
+			SkipToNextSong();
+		}
 	}
 }

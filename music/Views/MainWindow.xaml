@@ -1,6 +1,8 @@
 ﻿<Window x:Class="MusicPlayer.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MusicPlayer.Utils"
+        
         Title="Music App"
         Height="604"
         Width="1000"
@@ -9,7 +11,7 @@
 
     <!-- Define window-level resources here -->
     <Window.Resources>
-        
+
         <Style x:Key="NavButtonStyle" TargetType="Button">
             <Setter Property="Foreground" Value="White" />
             <Setter Property="Background" Value="Transparent" />
@@ -34,6 +36,7 @@
             </Setter>
         </Style>
     </Window.Resources>
+
 
     <!-- Window Content -->
     <Grid>
@@ -84,48 +87,71 @@
                 </ListBox.ItemTemplate>
             </ListBox>
 
-
             <!-- MediaElement to play the selected song -->
             <MediaElement x:Name="mediaElement"
                           Volume="0.05"
                       LoadedBehavior="Manual"
                       UnloadedBehavior="Stop"
                       Margin="10"
-                      VerticalAlignment="Bottom" />
+                      VerticalAlignment="Bottom" MediaEnded="mediaElement_MediaEnded" />
+
+
 
         </Grid>
 
         <!-- Bottom Media Controls Bar -->
         <Grid Background="#2C2C2C" Grid.Row="1" Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="400" />
-                <!-- Left: Currently Playing -->
-                <ColumnDefinition Width="*" />
-                <!-- Center: Media Controls -->
-                <ColumnDefinition Width="200" />
-                <!-- Right: Volume Control -->
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <!-- Row for Media Controls and Information -->
+                <RowDefinition Height="Auto" />
+                <!-- Row for Additional Bar -->
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-            <!-- Currently Playing -->
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10">
-                <Image Source="your_album_art.png" Width="40" Height="40" />
-                <StackPanel Margin="10,0,0,0">
-                    <TextBlock Text="{Binding SelectedItem.Title, ElementName=listBoxSongs}" Foreground="White" FontWeight="Bold" />
-                    <TextBlock Text="{Binding SelectedItem.Artist[0], ElementName=listBoxSongs}" Foreground="Gray" />
+            <!-- Bottom Media Controls Bar -->
+            <DockPanel LastChildFill="True">
+
+                <!-- Currently Playing -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="10">
+                    <Image Source="your_album_art.png" Width="40" Height="40" />
+                    <StackPanel Margin="10,0,0,0">
+                        <TextBlock Text="{Binding SelectedItem.Title, ElementName=listBoxSongs}" Foreground="White" FontWeight="Bold" />
+                        <TextBlock Text="{Binding SelectedItem.Artist[0], ElementName=listBoxSongs}" Foreground="Gray" />
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
 
-            <!-- Media Controls -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="00,0,0,0">
-                <Button Name="btnPrevious" Content="⏮" FontSize="18" Width="40" Height="40" Foreground="White" Background="Transparent" Click="btnPrevious_Click" />
-                <Button Name="btnPlayPause" Content="⏯" FontSize="18" Width="40" Height="40" Foreground="White" Background="Transparent" Click="btnPlayPause_Click" />
-                <Button Name="btnNext" Content="⏭" FontSize="18" Width="40" Height="40" Foreground="White" Background="Transparent" Click="btnNext_Click" />
-            </StackPanel>
+                <!-- Volume Control -->
+                <Slider x:Name="sliderVolume" Minimum="0" Maximum="0.25" Value="{Binding Volume, ElementName=mediaElement}" DockPanel.Dock="Right" Margin="20" Width="130" />
+
+                <!-- Media Controls -->
+                <StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Button Name="btnPrevious" Content="⏮" FontSize="18" Width="40" Height="40" Foreground="White" Background="Transparent" Click="btnPrevious_Click" />
+                        <Button Name="btnPlayPause" Content="⏯" FontSize="18" Width="40" Height="40" Foreground="White" Background="Transparent" Click="btnPlayPause_Click" />
+                        <Button Name="btnNext" Content="⏭" FontSize="18" Width="40" Height="40" Foreground="White" Background="Transparent" Click="btnNext_Click" />
+                    </StackPanel>
+
+                    <!-- Slider and Time Label -->
+                    <DockPanel LastChildFill="True" Margin="0,0,0,10" Width="450">
+                        <!-- Right Text Block -->
+                        <TextBlock Text="{Binding SelectedItem.Duration, ElementName=listBoxSongs, StringFormat={}{0:mm\\:ss}}" Foreground="White" FontWeight="Bold" VerticalAlignment="Center" DockPanel.Dock="Right" Margin="10,0,0,0" />
+
+                        <!-- Left Text Block -->
+                        <TextBlock x:Name="textCurrentTime" Text="{Binding Position, ElementName=mediaElement, StringFormat={}{0:mm\\:ss}}" Foreground="White" FontWeight="Bold" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="0,0,10,0" />
+
+                        <!-- Slider -->
+                        <Slider x:Name="positionSlider" 
+                                Maximum="{Binding SelectedItem.Duration.TotalSeconds, ElementName=listBoxSongs}" 
+                                Value="{Binding ElementName=mediaElement, Path=Position, Mode=TwoWay}"
+                                VerticalAlignment="Center" ValueChanged="positionSlider_ValueChanged" />
+                    </DockPanel>
+
+                </StackPanel>
+            </DockPanel>
 
 
-
-            <!-- Volume Control -->
-            <Slider x:Name="sliderVolume" Minimum="0" Maximum="0.25" Value="{Binding Volume, ElementName=mediaElement}" Grid.Column="2" VerticalAlignment="Center" Margin="20" />
         </Grid>
     </Grid>
 </Window>
+    
