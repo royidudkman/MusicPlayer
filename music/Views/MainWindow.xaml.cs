@@ -41,18 +41,52 @@ namespace MusicPlayer.Views
 			loadLibrary();
 			MessageBox.Show("Songs uploaded to the library.");
 		}
+
 		private void buttonLibrary_Click(object sender, RoutedEventArgs e)
 		{
 			loadLibrary();
-		}
-		private void loadLibrary()
-		{
-			listBoxSongs.ItemsSource = m_LibraryViewModel.LoadSongsFromLibrary();
 		}
 
 		private void buttonBrowse_Click(object sender, RoutedEventArgs e)
 		{
 
+		}
+
+		private void btnPrevious_Click(object sender, RoutedEventArgs e)
+		{
+			if (mediaElement.Position.TotalSeconds < 5)
+			{
+				SkipToPreviousSong();
+
+			}
+
+			else
+			{
+				mediaElement.Position = TimeSpan.FromSeconds(0);
+			}
+		}
+
+		private void btnNext_Click(object sender, RoutedEventArgs e)
+		{
+			SkipToNextSong();
+		}
+
+		private void btnPlayPause_Click(object sender, RoutedEventArgs e)
+		{
+			if (isPlaying)
+			{
+				isPlaying = false;
+				mediaElement.Pause();
+				cts.Cancel();
+			}
+
+			else
+			{
+				isPlaying = true;
+				mediaElement.Play();
+				cts = new CancellationTokenSource();
+				_ = UpdateUIAsync(cts.Token);
+			}
 		}
 
 		private void OnSongSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -64,6 +98,28 @@ namespace MusicPlayer.Views
 			{
 				PlaySong(selectedSong);
 			}
+		}
+
+		private void positionSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+			if (mediaElement.NaturalDuration.HasTimeSpan)
+			{
+				mediaElement.Position = TimeSpan.FromSeconds(positionSlider.Value);
+			}
+		}
+
+		private void mediaElement_MediaEnded(object sender, RoutedEventArgs e)
+		{
+			SkipToNextSong();
+		}
+
+
+
+
+
+		private void loadLibrary()
+		{
+			listBoxSongs.ItemsSource = m_LibraryViewModel.LoadSongsFromLibrary();
 		}
 
 		private async void PlaySong(Song song)
@@ -96,51 +152,6 @@ namespace MusicPlayer.Views
 			catch (TaskCanceledException)
 			{
 				// Handle the cancellation if needed
-			}
-		}
-
-		private void btnPrevious_Click(object sender, RoutedEventArgs e)
-		{
-			if(mediaElement.Position.TotalSeconds < 5)
-			{
-				SkipToPreviousSong();
-
-			}
-
-			else
-			{
-				mediaElement.Position = TimeSpan.FromSeconds(0);	
-			}
-		}
-
-		private void btnNext_Click(object sender, RoutedEventArgs e)
-		{
-			SkipToNextSong();
-		}
-
-		private void btnPlayPause_Click(object sender, RoutedEventArgs e)
-		{
-			if (isPlaying)
-			{
-				isPlaying = false;
-				mediaElement.Pause();
-				cts.Cancel();
-			}
-
-			else
-			{
-				isPlaying = true;
-				mediaElement.Play();
-				cts = new CancellationTokenSource();
-				_ = UpdateUIAsync(cts.Token);
-			}
-		}
-
-		private void positionSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-		{
-			if (mediaElement.NaturalDuration.HasTimeSpan)
-			{
-				mediaElement.Position = TimeSpan.FromSeconds(positionSlider.Value);
 			}
 		}
 
@@ -180,12 +191,6 @@ namespace MusicPlayer.Views
 				}
 			}
 		}
-
-		private void mediaElement_MediaEnded(object sender, RoutedEventArgs e)
-		{
-			SkipToNextSong();
-		}
-
 		
 	}
 }
