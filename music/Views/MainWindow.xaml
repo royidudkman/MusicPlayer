@@ -60,44 +60,38 @@
                        FontSize="24" 
                        FontWeight="Bold" 
                        Margin="20" />
-            <Button Content="Home" Style="{StaticResource NavButtonStyle}" />
-            <Button Content="Browse" Style="{StaticResource NavButtonStyle}" />
-            <Button Content="Your Library" Style="{StaticResource NavButtonStyle}" />
-            <Button Content="Create Playlist" Style="{StaticResource NavButtonStyle}" />
+            <Button Name="buttonLibrary" Content="Your Library" Style="{StaticResource NavButtonStyle}" Click="buttonLibrary_Click" />
+            <Button Name="buttonBrowse" Content="Browse" Style="{StaticResource NavButtonStyle}" Click="buttonBrowse_Click" />
             <Button Name="buttonUpload" Content="Upload Music" Style="{StaticResource NavButtonStyle}" Click="buttonUpload_Click" />
 
         </StackPanel>
 
         <!-- Main Content Area -->
         <Grid Grid.Row="0" Grid.Column="1">
-
-            <!-- ListBox to display the list of songs -->
-            <ListBox x:Name="listBoxSongs" ItemsSource="{Binding Songs}"
-         SelectionChanged="OnSongSelectionChanged"
-         Background="#2C2C2C"
-         Foreground="White"
-         FontSize="18"
-         Margin="10"
-         BorderBrush="Transparent"
-         BorderThickness="1">
+            <ListBox x:Name="listBoxSongs" 
+             SelectionChanged="OnSongSelectionChanged"
+             Background="#2C2C2C"
+             Foreground="White"
+             FontSize="18"
+             Margin="10"
+             BorderBrush="Transparent"
+             BorderThickness="1">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Title}" />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
+        </Grid>
 
-            <!-- MediaElement to play the selected song -->
-            <MediaElement x:Name="mediaElement"
+
+        <!-- MediaElement to play the selected song -->
+        <MediaElement x:Name="mediaElement"
                           Volume="0.05"
                       LoadedBehavior="Manual"
                       UnloadedBehavior="Stop"
                       Margin="10"
                       VerticalAlignment="Bottom" MediaEnded="mediaElement_MediaEnded" />
-
-
-
-        </Grid>
 
         <!-- Bottom Media Controls Bar -->
         <Grid Background="#2C2C2C" Grid.Row="1" Grid.ColumnSpan="2">

@@ -96,7 +96,8 @@
     <Compile Include="Utils\MediaElementWrapper.cs" />
     <Compile Include="Utils\TimeSpanToDoubleConverter.cs" />
     <Compile Include="Utils\VolumeConverter.cs" />
-    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\LibraryViewModel.cs" />
+    <Compile Include="ViewModels\UploadMusicViewModel.cs" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

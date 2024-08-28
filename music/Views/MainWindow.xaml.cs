@@ -21,27 +21,39 @@ using System.Windows.Threading;
 
 namespace MusicPlayer.Views
 {
-	/// <summary>
-	/// Interaction logic for MainWindow.xaml
-	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private MainViewModel m_MainViewModel;
+		private UploadMusicViewModel m_UploadMusicViewModel;
+		private LibraryViewModel m_LibraryViewModel;
 		private bool isPlaying = false;
 		private CancellationTokenSource cts = new CancellationTokenSource();
 
-		
 		public MainWindow()
 		{
 			InitializeComponent();
-			m_MainViewModel = new MainViewModel();
-			DataContext = m_MainViewModel;	
+			m_UploadMusicViewModel = new UploadMusicViewModel();
+			m_LibraryViewModel = new LibraryViewModel();	
 		}
 
 		private void buttonUpload_Click(object sender, RoutedEventArgs e)
 		{
-			m_MainViewModel.LoadSongs();
-        }
+			m_UploadMusicViewModel.UploadSongsToLibrary();
+			loadLibrary();
+			MessageBox.Show("Songs uploaded to the library.");
+		}
+		private void buttonLibrary_Click(object sender, RoutedEventArgs e)
+		{
+			loadLibrary();
+		}
+		private void loadLibrary()
+		{
+			listBoxSongs.ItemsSource = m_LibraryViewModel.LoadSongsFromLibrary();
+		}
+
+		private void buttonBrowse_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
 
 		private void OnSongSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
@@ -173,5 +185,7 @@ namespace MusicPlayer.Views
 		{
 			SkipToNextSong();
 		}
+
+		
 	}
 }

@@ -9,23 +9,19 @@ using System.Threading.Tasks;
 
 namespace MusicPlayer.ViewModels
 {
-	internal class MainViewModel
+	internal class UploadMusicViewModel
 	{
         public ObservableCollection<Song> Songs { get; set; } = new ObservableCollection<Song>();
 		private FileService m_FileService;
 
-        public MainViewModel()
+        public UploadMusicViewModel()
         {
             m_FileService = new FileService();
         }
 
-        public void LoadSongs()
+        public void UploadSongsToLibrary()
         {
-            List<Song> loadedSongs = m_FileService.LoadMusicFiles();
-            foreach (Song song in loadedSongs)
-            {
-                Songs.Add(song);
-            }
+            m_FileService.SaveMusicFilesToLibrary();
         }
     }
 }
