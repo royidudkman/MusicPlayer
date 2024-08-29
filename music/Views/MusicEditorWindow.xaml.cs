@@ -59,5 +59,10 @@ namespace MusicPlayer.Views
 
 			Close();
 		}
+
+		private void btnDelete_Click(object sender, RoutedEventArgs e)
+		{
+			m_MusicViewModel.DeleteSong(m_Song.FilePath);
+		}
 	}
 }
