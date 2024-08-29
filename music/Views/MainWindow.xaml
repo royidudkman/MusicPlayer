@@ -4,8 +4,8 @@
         xmlns:local="clr-namespace:MusicPlayer.Utils"
         
         Title="Music App"
-        Height="604"
-        Width="1000"
+        Height="600" MinHeight="600" MaxHeight="600"
+        Width="1000" MinWidth="1000" MaxWidth="1000"
         WindowStartupLocation="CenterScreen"
         Background="#1D1D1D">
 
@@ -68,20 +68,96 @@
 
         <!-- Main Content Area -->
         <Grid Grid.Row="0" Grid.Column="1">
-            <ListBox x:Name="listBoxSongs" 
-             SelectionChanged="OnSongSelectionChanged"
-             Background="#2C2C2C"
-             Foreground="White"
-             FontSize="18"
-             Margin="10"
-             BorderBrush="Transparent"
-             BorderThickness="1">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Title}" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+
+            <TabControl x:Name="tabControlMusic" Grid.Row="0" Grid.Column="0" Background="#292929">
+
+                <TabItem Header="All Songs">
+                    <ListBox x:Name="listBoxSongs" 
+                               SelectionChanged="OnSongSelectionChanged"
+                               Background="#2C2C2C"
+                               Foreground="White"
+                               FontSize="18"
+                               Margin="10"
+                               BorderBrush="Transparent"
+                               BorderThickness="1">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="640" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="{Binding Title}"   VerticalAlignment="Center" 
+                                               Margin="5,0,0,0" 
+                                               TextTrimming="CharacterEllipsis"
+                                               Grid.Column="0"  />
+                                    <Button x:Name="btnEdit" Content="..." Width="30" Height="30" HorizontalAlignment="Right"
+                                            VerticalAlignment="Center" 
+                                            Margin="50,0,0,0" 
+                                            Grid.Column="1" Click="btnEdit_Click" />
+                                </Grid>
+
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </TabItem>
+
+                <TabItem Header="Artists">
+                    <ListBox x:Name="listBoxArtists" 
+                               SelectionChanged="OnSongSelectionChanged"
+                               Background="#2C2C2C"
+                               Foreground="White"
+                               FontSize="18"
+                               Margin="10"
+                               BorderBrush="Transparent"
+                               BorderThickness="1">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </TabItem>
+
+                <TabItem Header="Playlists">
+                    <ListBox x:Name="listBoxPlaylist" 
+                               SelectionChanged="OnSongSelectionChanged"
+                               Background="#2C2C2C"
+                               Foreground="White"
+                               FontSize="18"
+                               Margin="10"
+                               BorderBrush="Transparent"
+                               BorderThickness="1">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </TabItem>
+
+                <TabItem Header="Albums">
+                    <ListBox x:Name="listBoxAlbums" 
+                               SelectionChanged="OnSongSelectionChanged"
+                               Background="#2C2C2C"
+                               Foreground="White"
+                               FontSize="18"
+                               Margin="10"
+                               BorderBrush="Transparent"
+                               BorderThickness="1">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Title}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </TabItem>
+
+            </TabControl>
+
+
+
         </Grid>
 
 

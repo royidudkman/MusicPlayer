@@ -32,14 +32,14 @@ namespace MusicPlayer.Views
 		{
 			InitializeComponent();
 			m_UploadMusicViewModel = new UploadMusicViewModel();
-			m_LibraryViewModel = new LibraryViewModel();	
+			m_LibraryViewModel = new LibraryViewModel();
+			loadLibrary();
 		}
 
 		private void buttonUpload_Click(object sender, RoutedEventArgs e)
 		{
 			m_UploadMusicViewModel.UploadSongsToLibrary();
-			loadLibrary();
-			MessageBox.Show("Songs uploaded to the library.");
+			loadLibrary();		
 		}
 
 		private void buttonLibrary_Click(object sender, RoutedEventArgs e)
@@ -192,6 +192,19 @@ namespace MusicPlayer.Views
 				}
 			}
 		}
-		
+
+		private void btnEdit_Click(object sender, RoutedEventArgs e)
+		{
+			Button btnEdit = sender as Button;
+			Song selectedSong = btnEdit.DataContext as Song;
+
+			if (selectedSong != null)
+			{
+				MusicEditorWindow musicEditorWindow = new MusicEditorWindow(selectedSong);
+				musicEditorWindow.ShowDialog();
+			}
+
+			loadLibrary();
+		}
 	}
 }

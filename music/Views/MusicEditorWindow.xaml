@@ -1,0 +1,46 @@
+﻿<Window x:Class="MusicPlayer.Views.MusicEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MusicPlayer.Views"
+        mc:Ignorable="d"
+        Title="Music Editor" Height="250" Width="400">
+    <StackPanel Margin="10">
+        <Grid>
+            <!-- Define Rows and Columns -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80" />
+                <!-- Label Column -->
+                <ColumnDefinition Width="*" />
+                <!-- TextBox Column -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Title -->
+            <Label Content="Title" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox x:Name="textBoxTitle" Grid.Row="0" Grid.Column="1" Width="300" Margin="0,0,0,10"/>
+
+            <!-- Artist -->
+            <Label Content="Artist" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox x:Name="textBoxArtist" Grid.Row="1" Grid.Column="1" Width="300" Margin="0,0,0,10"/>
+
+            <!-- Album -->
+            <Label Content="Album" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox x:Name="textBoxAlbum" Grid.Row="2" Grid.Column="1" Width="300" Margin="0,0,0,10"/>
+
+            <!-- Genre -->
+            <Label Content="Genre" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox x:Name="textBoxGenre" Grid.Row="3" Grid.Column="1" Width="300" Margin="0,0,0,10"/>
+        </Grid>
+
+        <!-- Save Button -->
+        <Button x:Name="btnSave" Content="Save" HorizontalAlignment="Center" Width="100" Margin="0,10,0,0" Click="btnSave_Click"/>
+    </StackPanel>
+</Window>

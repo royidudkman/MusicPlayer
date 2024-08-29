@@ -93,11 +93,16 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Services\FileService.cs" />
+    <Compile Include="Services\MusicService.cs" />
     <Compile Include="Services\YoutubeService.cs" />
     <Compile Include="Utils\TimeSpanToDoubleConverter.cs" />
     <Compile Include="Utils\VolumeConverter.cs" />
     <Compile Include="ViewModels\LibraryViewModel.cs" />
+    <Compile Include="ViewModels\MusicViewModel.cs" />
     <Compile Include="ViewModels\UploadMusicViewModel.cs" />
+    <Compile Include="Views\MusicEditorWindow.xaml.cs">
+      <DependentUpon>MusicEditorWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\BrowserWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -118,6 +123,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\MusicEditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Playlist.cs" />
