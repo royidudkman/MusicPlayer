@@ -35,6 +35,36 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- DataTemplate for albums -->
+        <DataTemplate x:Key="FolderTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="640" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding}" VerticalAlignment="Center" 
+                       Margin="5,0,0,0" 
+                       TextTrimming="CharacterEllipsis"
+                       Grid.Column="0"  />
+            </Grid>
+        </DataTemplate>
+
+        <!-- DataTemplate for songs -->
+        <DataTemplate x:Key="SongTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="640" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding Title}" VerticalAlignment="Center" 
+                       Margin="5,0,0,0" 
+                       TextTrimming="CharacterEllipsis"
+                       Grid.Column="0"  />
+            </Grid>
+        </DataTemplate>
     </Window.Resources>
 
 
@@ -103,56 +133,34 @@
                     </ListBox>
                 </TabItem>
 
-                <TabItem Header="Artists">
-                    <ListBox x:Name="listBoxArtists" 
-                               SelectionChanged="OnSongSelectionChanged"
+                <TabItem x:Name="artistsTab" Header="Artists" MouseDown="artistsTab_MouseDown">
+                    <ListBox x:Name="listBoxArtists"                              
                                Background="#2C2C2C"
                                Foreground="White"
                                FontSize="18"
                                Margin="10"
                                BorderBrush="Transparent"
-                               BorderThickness="1">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Title}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                               BorderThickness="1" 
+                               SelectionChanged="listBoxArtists_SelectionChanged"
+                               ItemTemplate="{StaticResource FolderTemplate}"/>
                 </TabItem>
 
-                <TabItem Header="Playlists">
-                    <ListBox x:Name="listBoxPlaylist" 
-                               SelectionChanged="OnSongSelectionChanged"
-                               Background="#2C2C2C"
-                               Foreground="White"
-                               FontSize="18"
-                               Margin="10"
-                               BorderBrush="Transparent"
-                               BorderThickness="1">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Title}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </TabItem>
-
-                <TabItem Header="Albums">
+                <TabItem x:Name="albumsTab" Header="Albums" MouseDown="albumsTab_MouseDown">
                     <ListBox x:Name="listBoxAlbums" 
-                               SelectionChanged="OnSongSelectionChanged"
                                Background="#2C2C2C"
                                Foreground="White"
                                FontSize="18"
                                Margin="10"
                                BorderBrush="Transparent"
-                               BorderThickness="1">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Title}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
+                               BorderThickness="1" 
+                               SelectionChanged="listBoxAlbums_SelectionChanged"
+                               ItemTemplate="{StaticResource FolderTemplate}">
                     </ListBox>
                 </TabItem>
+                
+
+
+
 
             </TabControl>
 

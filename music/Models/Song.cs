@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MusicPlayer.Models
 {
-	public class Song
+	public class Song 
 	{
         public string Title { get; set; }
         public string[] Artist { get; set; }
@@ -14,5 +15,5 @@ namespace MusicPlayer.Models
         public string[] Genres { get; set; }
         public TimeSpan Duration { get; set; }
         public string FilePath { get; set; }
-    }
+	}
 }

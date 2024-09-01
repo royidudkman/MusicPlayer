@@ -27,6 +27,8 @@ namespace MusicPlayer.Views
 		private LibraryViewModel m_LibraryViewModel;
 		private bool isPlaying = false;
 		private CancellationTokenSource cts = new CancellationTokenSource();
+		
+
 
 		public MainWindow()
 		{
@@ -34,6 +36,8 @@ namespace MusicPlayer.Views
 			m_UploadMusicViewModel = new UploadMusicViewModel();
 			m_LibraryViewModel = new LibraryViewModel();
 			loadLibrary();
+			loadAlbums();
+			loadArtists();
 		}
 
 		private void buttonUpload_Click(object sender, RoutedEventArgs e)
@@ -114,9 +118,67 @@ namespace MusicPlayer.Views
 			SkipToNextSong();
 		}
 
+		private void listBoxAlbums_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string selectedAlbum = listBoxAlbums.SelectedItem as string;
+
+			if (selectedAlbum != null && !(listBoxAlbums.SelectedItem is Song))
+			{
+				List<Song> loadedSongs = m_LibraryViewModel.GetSongsFromAlbum(selectedAlbum);
+
+				listBoxAlbums.ItemTemplate = (DataTemplate)FindResource("SongTemplate");
+				listBoxAlbums.ItemsSource = loadedSongs;
+
+				listBoxAlbums.SelectedIndex = -1;
+			}
+			else if (listBoxAlbums.SelectedItem is Song selectedSong)
+			{
+				PlaySong(selectedSong);
+			}
+		}
+
+		private void albumsTab_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			loadAlbums();
+			listBoxAlbums.ItemTemplate = (DataTemplate)FindResource("FolderTemplate");
+		}
+
+		private void listBoxArtists_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			string selectedArtist = listBoxArtists.SelectedItem as string;
+
+			if (selectedArtist != null && !(listBoxArtists.SelectedItem is Song))
+			{
+				List<Song> loadedSongs = m_LibraryViewModel.GetSongsFromArtist(selectedArtist);
+
+				listBoxArtists.ItemTemplate = (DataTemplate)FindResource("SongTemplate");
+				listBoxArtists.ItemsSource = loadedSongs;
+
+				listBoxArtists.SelectedIndex = -1;
+			}
+			else if (listBoxArtists.SelectedItem is Song selectedSong)
+			{
+				PlaySong(selectedSong);
+			}
+		}
+
+		private void artistsTab_MouseDown(object sender, MouseButtonEventArgs e)
+		{
+			loadArtists();
+			listBoxArtists.ItemTemplate = (DataTemplate)FindResource("FolderTemplate");
+		}
 
 
 
+
+		private void loadArtists()
+		{
+			listBoxArtists.ItemsSource = m_LibraryViewModel.LoadArtistNames();
+		}
+		private void loadAlbums()
+		{
+			listBoxAlbums.ItemsSource = m_LibraryViewModel.LoadAlbumNames();
+		}
 
 		private void loadLibrary()
 		{
@@ -156,20 +218,48 @@ namespace MusicPlayer.Views
 			}
 		}
 
+		private ListBox getActiveListBox()
+		{
+			int tabIndex = tabControlMusic.SelectedIndex;
+			ListBox activeListBox = new ListBox();
+			switch (tabIndex)
+			{
+				case 0:
+					activeListBox = listBoxSongs;
+					break;
+
+				case 1:
+					activeListBox = listBoxArtists;
+					break;
+
+				case 2:
+					activeListBox = listBoxAlbums;
+					break;
+
+				default:
+					activeListBox = listBoxSongs;
+					break;
+			}
+
+			return activeListBox;
+		}
+
 		private void SkipToNextSong()
 		{
-			if (listBoxSongs.Items.Count > 0)
+			ListBox activeListBox = getActiveListBox();
+
+			if (activeListBox.Items.Count > 0)
 			{
-				if (listBoxSongs.SelectedIndex < listBoxSongs.Items.Count - 1)
+				if (activeListBox.SelectedIndex < activeListBox.Items.Count - 1)
 				{
-					listBoxSongs.SelectedIndex++;
+					activeListBox.SelectedIndex++;
 				}
 				else
 				{
-					listBoxSongs.SelectedIndex = 0;
+					activeListBox.SelectedIndex = 0;
 				}
 
-				Song selectedSong = listBoxSongs.SelectedItem as Song;
+				Song selectedSong = activeListBox.SelectedItem as Song;
 
 				if (selectedSong != null)
 				{
@@ -180,11 +270,13 @@ namespace MusicPlayer.Views
 
 		private void SkipToPreviousSong()
 		{
-			if (listBoxSongs.Items.Count > 0 && listBoxSongs.SelectedIndex > 0)
-			{
-				listBoxSongs.SelectedIndex--;
+			ListBox activeListBox = getActiveListBox();
 
-				Song selectedSong = listBoxSongs.SelectedItem as Song;
+			if (activeListBox.Items.Count > 0 && activeListBox.SelectedIndex > 0)
+			{
+				activeListBox.SelectedIndex--;
+
+				Song selectedSong = activeListBox.SelectedItem as Song;
 
 				if (selectedSong != null)
 				{
@@ -206,5 +298,7 @@ namespace MusicPlayer.Views
 
 			loadLibrary();
 		}
+
+		
 	}
 }
